@@ -228,7 +228,7 @@ public class Principal {
 //
 //
 		//Agent0 on container0
-		for(int i=0;i<1;i++) {
+		for(int i=0;i<2;i++) {
 			c = containerList.get("container0");
 			agentName="Agent"+i;
 			try {

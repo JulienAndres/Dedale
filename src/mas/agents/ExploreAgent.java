@@ -64,7 +64,7 @@ public class ExploreAgent extends abstractAgent{
 		f.registerState(new ShareMapBehaviour(this), "sharemap");
 
 		f.registerDefaultTransition("observe", "Deplacement");
-		f.registerDefaultTransition("Deplacement", "observe");
+		f.registerDefaultTransition("sharemap", "observe");
 		f.registerDefaultTransition("Deplacement", "sharemap");
 		addBehaviour(f);
 

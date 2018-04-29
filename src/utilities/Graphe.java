@@ -189,6 +189,9 @@ public class Graphe implements Serializable{
 	public boolean contains(String id){
 		return this.noeudConnu.containsKey(id);
 	}
-
+	
+	public HashMap<String,Node> export() {
+		return noeudConnu;
+	}
 	
 }

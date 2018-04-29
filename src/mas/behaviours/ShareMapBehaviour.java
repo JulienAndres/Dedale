@@ -12,7 +12,7 @@ import jade.core.behaviours.OneShotBehaviour;
 import jade.core.behaviours.SimpleBehaviour;
 import jade.lang.acl.ACLMessage;
 
-public class ShareMapBehaviour extends SimpleBehaviour{
+public class ShareMapBehaviour extends OneShotBehaviour{
 
 	private static final long serialVersionUID = -2379766870233405738L;
 	private ExploreAgent myAgent;
@@ -34,7 +34,7 @@ public class ShareMapBehaviour extends SimpleBehaviour{
 		if (myPosition.equals("")) return;
 		
 		try {
-			msg.setContentObject("test");
+			msg.setContentObject(myAgent.getGraphe().export());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -50,10 +50,5 @@ public class ShareMapBehaviour extends SimpleBehaviour{
 		
 	}
 
-	@Override
-	public boolean done() {
-		// TODO Auto-generated method stub
-		return true;
-	}
 
 }
