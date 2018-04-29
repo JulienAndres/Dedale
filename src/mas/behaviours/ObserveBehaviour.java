@@ -1,5 +1,6 @@
 package mas.behaviours;
 
+import java.io.IOException;
 import java.util.List;
 
 import env.Attribute;
@@ -7,8 +8,12 @@ import env.Couple;
 import mas.agents.ExploreAgent;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.SimpleBehaviour;
+import jade.core.behaviours.OneShotBehaviour;;
 
-public class ObserveBehaviour extends SimpleBehaviour {
+
+public class ObserveBehaviour extends OneShotBehaviour {
+
+	private static final long serialVersionUID = -1935358198561959915L;
 	private ExploreAgent myAgent;
 	
 	public ObserveBehaviour(ExploreAgent myAgent) {
@@ -18,9 +23,11 @@ public class ObserveBehaviour extends SimpleBehaviour {
 	
 	@Override
 	public void action() {
+		System.out.println("lancement observe");
 		String myPosition=((mas.abstractAgent)this.myAgent).getCurrentPosition();
 		if (myPosition!=""){
 			List<Couple<String,List<Attribute>>> lobs = ((mas.abstractAgent)this.myAgent).observe();
+			myAgent.getGraphe().updateFomObserve(lobs);
 			
 			//IF BLOCKED i.e. NOT MOVED
 			//incrementer compteur de blocage
@@ -30,13 +37,15 @@ public class ObserveBehaviour extends SimpleBehaviour {
 			
 			
 		}
+		try {
+			System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to continue");
+			System.in.read();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
-	@Override
-	public boolean done() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+
 	
 	public int onEnd(){
 		//IF OK POUR SHARE (toujours!)

@@ -228,18 +228,21 @@ public class Principal {
 //
 //
 		//Agent0 on container0
-		c = containerList.get("container0");
-		agentName="Agent1";
-		try {
+		for(int i=0;i<1;i++) {
+			c = containerList.get("container0");
+			agentName="Agent"+i;
+			try {
 
-			Object[] objtab=new Object[]{env,EntityType.AGENT_EXPLORER};//used to give informations to the agent
-			AgentController	ag=c.createNewAgent(agentName,ExploreAgent.class.getName(),objtab);
-			agentList.add(ag);
-			System.out.println(agentName+" launched");
-		} catch (StaleProxyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+				Object[] objtab=new Object[]{env,EntityType.AGENT_EXPLORER};//used to give informations to the agent
+				AgentController	ag=c.createNewAgent(agentName,ExploreAgent.class.getName(),objtab);
+				agentList.add(ag);
+				System.out.println(agentName+" launched");
+			} catch (StaleProxyException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
 		}
+
 //
 ////
 //		c = containerList.get("container0");
