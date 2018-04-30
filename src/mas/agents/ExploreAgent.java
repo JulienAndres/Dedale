@@ -60,12 +60,15 @@ public class ExploreAgent extends abstractAgent{
 		path=new ArrayList<String>();
 		FSMBehaviour f= new FSMBehaviour();
 		f.registerFirstState(new ObserveBehaviour(this), "observe");
+		f.registerState(new MailCheckBehaviour(this), "mailcheck");
 		f.registerState(new MoveBehaviour(this), "Deplacement");
 		f.registerState(new ShareMapBehaviour(this), "sharemap");
-
-		f.registerDefaultTransition("observe", "Deplacement");
-		f.registerDefaultTransition("sharemap", "observe");
+		
+		f.registerDefaultTransition("observe", "mailcheck");		
+		f.registerDefaultTransition("mailcheck", "Deplacement");
 		f.registerDefaultTransition("Deplacement", "sharemap");
+		f.registerDefaultTransition("sharemap", "observe");
+
 		addBehaviour(f);
 
 		
@@ -81,6 +84,8 @@ public class ExploreAgent extends abstractAgent{
 		} catch (FIPAException e) {
 			e.printStackTrace();
 		}
+		doWait(2000);
+
 		System.out.println("the agent "+this.getLocalName()+ " is started");
 
 	}

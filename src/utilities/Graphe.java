@@ -21,7 +21,7 @@ public class Graphe implements Serializable{
 	private static final long serialVersionUID = 3325106123595323118L;
 	private boolean fullyExplored;
 	private HashMap<String,Node> noeudConnu;
-	private ExploreAgent myAgent;
+	private transient ExploreAgent myAgent;
 	
 	public  Graphe(ExploreAgent myAgent,HashMap<String,Node> noeudConnu,boolean fullyExplored) {
 		this.fullyExplored=fullyExplored;
@@ -100,6 +100,7 @@ public class Graphe implements Serializable{
 			
 		}
 	}
+	
 	public String getClosestNonExplore(String start){
 		boolean found = false;
 		List<String> fifo = new ArrayList<String>();
@@ -178,6 +179,18 @@ public class Graphe implements Serializable{
         return path;
     }
 	
+	public void sync(Graphe graphe) {
+		for (String id:graphe.getIds()) {
+			if(this.contains(id)) {//maj du node s il existe
+				this.getNode(id).sync(graphe.getNode(id));
+			}else {//sinon ajout du node
+				this.addNode(graphe.getNode(id));
+				
+			}
+		}
+		return;
+	}
+	
 	public Node getNode(String id) {
 		return this.noeudConnu.get(id);
 	}
@@ -190,8 +203,17 @@ public class Graphe implements Serializable{
 		return this.noeudConnu.containsKey(id);
 	}
 	
-	public HashMap<String,Node> export() {
-		return noeudConnu;
+	public Set<String> getIds(){
+		return this.noeudConnu.keySet();
+	}
+	public int nombreNoeud(){
+		
+		return noeudConnu.keySet().size();
+	}
+	public void afficher() {
+		for (String i:noeudConnu.keySet()) {
+			System.out.println(i+" "+noeudConnu.get(i).isVisited());
+		}
 	}
 	
 }

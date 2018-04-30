@@ -25,7 +25,6 @@ public class ShareMapBehaviour extends OneShotBehaviour{
 	@Override
 	public void action() {
 		// TODO Auto-generated method stub
-		System.out.println(myAgent.getLocalName() + ": Send graph");
 		String myPosition=((mas.abstractAgent)this.myAgent).getCurrentPosition();
 
 		ACLMessage msg=new ACLMessage(ACLMessage.INFORM);
@@ -34,7 +33,7 @@ public class ShareMapBehaviour extends OneShotBehaviour{
 		if (myPosition.equals("")) return;
 		
 		try {
-			msg.setContentObject(myAgent.getGraphe().export());
+			msg.setContentObject(myAgent.getGraphe());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -43,9 +42,7 @@ public class ShareMapBehaviour extends OneShotBehaviour{
 			msg.addReceiver(i);
 			
 		}
-		System.out.println("avantenvoie");
 		((mas.abstractAgent)this.myAgent).sendMessage(msg);
-		System.out.println("apres");
 
 		
 	}

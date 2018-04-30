@@ -58,4 +58,17 @@ public class Node implements Serializable{
 		return this.voisins.add(voisin.getId());
 	}
 	
+	public void sync(Node node) {
+		if (!node.getId().equals(this.id)) {
+			System.out.println("syncronisation sur 2 noeuds différents");
+			return;
+		}
+		if(node.isVisited()) {
+			this.visited=true;
+		}
+		for(String voisin:node.getVoisins()) {
+			this.voisins.add(voisin);//return true si le voisin n était pas dedans et que l ajout se fait.
+		}
+	}
+	
 }

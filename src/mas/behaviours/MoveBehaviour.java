@@ -29,23 +29,31 @@ public class MoveBehaviour extends OneShotBehaviour{
 
 	@Override
 	public void action() {
-		System.out.println(("test2"));
 		String myPosition=((mas.abstractAgent)this.myAgent).getCurrentPosition();
-		System.out.println(myPosition);
+		//System.out.println(myPosition);
 
 		if (myPosition!=""){
 			if (!myAgent.getGraphe().isFullyExplored()) {
 				this.exploration(myPosition);
 			}else {
-				System.out.println("EXPLORATION FINI");
+				System.out.println("EXPLORATION FINI"+myAgent.getLocalName());
+				System.out.println(myAgent.getGraphe().nombreNoeud());
+				try {
+				System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to continue");
+				System.in.read();
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+				myAgent.getGraphe().afficher();
 			}
 		}
-		try {
-			System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to continue");
-			System.in.read();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to continue");
+//			System.in.read();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	public void exploration(String myPosition) {

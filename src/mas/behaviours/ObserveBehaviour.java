@@ -23,7 +23,6 @@ public class ObserveBehaviour extends OneShotBehaviour {
 	
 	@Override
 	public void action() {
-		System.out.println("lancement observe");
 		String myPosition=((mas.abstractAgent)this.myAgent).getCurrentPosition();
 		if (myPosition!=""){
 			List<Couple<String,List<Attribute>>> lobs = ((mas.abstractAgent)this.myAgent).observe();
@@ -37,12 +36,12 @@ public class ObserveBehaviour extends OneShotBehaviour {
 			
 			
 		}
-		try {
-			System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to continue");
-			System.in.read();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to continue");
+//			System.in.read();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 
