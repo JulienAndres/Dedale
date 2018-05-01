@@ -26,14 +26,13 @@ public class ObserveBehaviour extends OneShotBehaviour {
 		String myPosition=((mas.abstractAgent)this.myAgent).getCurrentPosition();
 		if (myPosition!=""){
 			List<Couple<String,List<Attribute>>> lobs = ((mas.abstractAgent)this.myAgent).observe();
+			if (myAgent.getGraphe().getPosition().equals(myPosition)) {
+				myAgent.incBlock();
+			}
+			myAgent.getGraphe().setPosition(myPosition);
 			myAgent.getGraphe().updateFomObserve(lobs);
-			
-			//IF BLOCKED i.e. NOT MOVED
-			//incrementer compteur de blocage
-			//ELSE
-			//actualiser la map, reinitialiser le compteur de blocage
-			//myAgent.getWorld().
-			
+
+
 			
 		}
 //		try {
@@ -47,7 +46,9 @@ public class ObserveBehaviour extends OneShotBehaviour {
 
 	
 	public int onEnd(){
-		//IF OK POUR SHARE (toujours!)
+		if (myAgent.isBlocked()){
+			return 2;
+		}
 		return 1;
 		//IF BLOQUE
 		//return 2

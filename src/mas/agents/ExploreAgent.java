@@ -37,16 +37,14 @@ public class ExploreAgent extends abstractAgent{
 //	private Map<String, Couple<Couple<String,Boolean>,Couple<List<Attribute>, List<String>>>> map;
 	private Graphe map;
 	private List<String> path;
+	private int cptBlock;
 
-	
-	private void setBehaviour() {
-		
-	}
 	
 	
 	protected void setup(){
 
 		super.setup();
+		cptBlock=0;
 		
 		//get the parameters given into the object[]. In the current case, the environment where the agent will evolve
 		final Object[] args = getArguments();
@@ -129,7 +127,15 @@ public class ExploreAgent extends abstractAgent{
 	
 	
 	
-
+public void resetBlock() {
+	this.cptBlock=0;
+}
+public void incBlock() {
+	this.cptBlock+=1;
+}
+public boolean isBlocked() { //return true si bloqué
+	return this.cptBlock>=5;
+}
 
 	/**
 	 * This method is automatically called after doDelete()

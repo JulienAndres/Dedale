@@ -33,6 +33,7 @@ public class MoveBehaviour extends OneShotBehaviour{
 		//System.out.println(myPosition);
 
 		if (myPosition!=""){
+
 			if (!myAgent.getGraphe().isFullyExplored()) {
 				this.exploration(myPosition);
 			}else {

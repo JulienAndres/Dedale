@@ -22,16 +22,19 @@ public class Graphe implements Serializable{
 	private boolean fullyExplored;
 	private HashMap<String,Node> noeudConnu;
 	private transient ExploreAgent myAgent;
+	private String myPosition;
 	
 	public  Graphe(ExploreAgent myAgent,HashMap<String,Node> noeudConnu,boolean fullyExplored) {
 		this.fullyExplored=fullyExplored;
 		this.noeudConnu=noeudConnu;
 		this.myAgent=myAgent;
+		this.myPosition="";
 	}
 	public Graphe(ExploreAgent myAgent) {
 		this.myAgent=myAgent;
 		this.fullyExplored=false;
 		this.noeudConnu=new HashMap<String,Node>();
+		this.myPosition="";
 	}
 	
 	public boolean isFullyExplored() {
@@ -214,6 +217,12 @@ public class Graphe implements Serializable{
 		for (String i:noeudConnu.keySet()) {
 			System.out.println(i+" "+noeudConnu.get(i).isVisited());
 		}
+	}
+	public void setPosition(String pos) {
+		this.myPosition=pos;
+	}
+	public String getPosition() {
+		return myPosition;
 	}
 	
 }
