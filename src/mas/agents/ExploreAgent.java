@@ -90,6 +90,9 @@ public class ExploreAgent extends abstractAgent{
 	public Graphe getGraphe() {
 		return map;
 	}
+	public List<String> getPath() {
+		return this.path;
+	}
 	
 	public void doPath(ArrayList<String> path) {
 		this.path=path;

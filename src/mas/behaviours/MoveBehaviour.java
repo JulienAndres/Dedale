@@ -39,14 +39,16 @@ public class MoveBehaviour extends OneShotBehaviour{
 			}else {
 				System.out.println("EXPLORATION FINI"+myAgent.getLocalName());
 				System.out.println(myAgent.getGraphe().nombreNoeud());
-				try {
+//				try {
 				System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to continue");
-				System.in.read();
+//				System.in.read();
+//				myAgent.getGraphe().afficher();
+				myAgent.getGraphe().resetGraphe();
 
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-				myAgent.getGraphe().afficher();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//			
 			}
 		}
 //		try {

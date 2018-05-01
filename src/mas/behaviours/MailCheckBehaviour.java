@@ -48,7 +48,7 @@ public class MailCheckBehaviour extends OneShotBehaviour {
 
 				if (newMap!=null) {
 					myAgent.getGraphe().sync(graphe);
-					System.out.println("syncronisation "+myAgent.getLocalName());
+					//System.out.println("syncronisation "+myAgent.getLocalName());
 				}
 			} catch (UnreadableException e) {
 				// TODO Auto-generated catch block

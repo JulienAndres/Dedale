@@ -28,6 +28,8 @@ public class ObserveBehaviour extends OneShotBehaviour {
 			List<Couple<String,List<Attribute>>> lobs = ((mas.abstractAgent)this.myAgent).observe();
 			if (myAgent.getGraphe().getPosition().equals(myPosition)) {
 				myAgent.incBlock();
+			}else {
+				myAgent.resetBlock();
 			}
 			myAgent.getGraphe().setPosition(myPosition);
 			myAgent.getGraphe().updateFomObserve(lobs);
@@ -47,6 +49,7 @@ public class ObserveBehaviour extends OneShotBehaviour {
 	
 	public int onEnd(){
 		if (myAgent.isBlocked()){
+			System.out.println("bloké");
 			return 2;
 		}
 		return 1;

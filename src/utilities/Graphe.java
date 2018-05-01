@@ -181,7 +181,40 @@ public class Graphe implements Serializable{
         }
         return path;
     }
-	
+	/**
+	 * 
+	 * @param pos 
+	 * @return -1 si cul de sac
+	 * @return -2 si autre chemin possible
+	 * @return toRet : nombre de noeud du couloir à reculer
+	 */
+	public int distCouloir(String pos) {//distance  du couloir à reculer --pour les interblocages 
+		if(myAgent.getPath().size()==0) return 0;
+		HashSet<String> voisins = noeudConnu.get(pos).getVoisins();
+		String intersection=myAgent.getPath().get(0);
+		int toRet=0;
+		String tmp;
+		String current=pos;
+		if (voisins.size()==1) {//cul de sac
+			return -1;
+		}
+		if (voisins.size()>2) {
+			return -2;
+		}
+		while(voisins.size()==2) {
+			tmp=current;
+			toRet++;
+			for(String i:voisins) {
+				if(!i.equals(intersection)) {
+					current=i;
+				}
+			}
+			intersection=tmp;
+			voisins=noeudConnu.get(current).getVoisins();
+		}
+		
+		return toRet;
+	}
 	public void sync(Graphe graphe) {
 		for (String id:graphe.getIds()) {
 			if(this.contains(id)) {//maj du node s il existe
@@ -192,6 +225,10 @@ public class Graphe implements Serializable{
 			}
 		}
 		return;
+	}
+	public void resetGraphe() {
+		fullyExplored=false;
+		this.noeudConnu=new HashMap<String,Node>();
 	}
 	
 	public Node getNode(String id) {
