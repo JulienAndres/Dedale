@@ -1,12 +1,16 @@
 package utilities;
 
 import java.io.Serializable;
+
+import mas.agents.Agent;
+import mas.agents.CollectorAgent;
 import mas.agents.ExploreAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 
@@ -21,7 +25,7 @@ public class Graphe implements Serializable{
 	private static final long serialVersionUID = 3325106123595323118L;
 	private boolean fullyExplored;
 	private HashMap<String,Node> noeudConnu;
-	private transient ExploreAgent myAgent;
+	private transient Agent myAgent;
 	private String myPosition;
 	
 	public  Graphe(ExploreAgent myAgent,HashMap<String,Node> noeudConnu,boolean fullyExplored) {
@@ -30,7 +34,7 @@ public class Graphe implements Serializable{
 		this.myAgent=myAgent;
 		this.myPosition="";
 	}
-	public Graphe(ExploreAgent myAgent) {
+	public Graphe(Agent myAgent) {
 		this.myAgent=myAgent;
 		this.fullyExplored=false;
 		this.noeudConnu=new HashMap<String,Node>();
@@ -54,7 +58,7 @@ public class Graphe implements Serializable{
 	
 	public void updateFomObserve(List<Couple<String,List<Attribute>>> lobs) {
 		String current=lobs.get(0).getLeft();
-		//List<Attribute> currentContent= sensorInformation.get(0).getRight();
+		List<Attribute> currentContent= lobs.get(0).getRight();
 		Node currentNode;
 		//si le noeud actuel est déjà dans le graphe
 			//maj horloge TODO
@@ -63,6 +67,7 @@ public class Graphe implements Serializable{
 		if(this.contains(current)) {
 			currentNode=this.getNode(current);
 			currentNode.setVisited(true);
+			currentNode.setContent(currentContent);
 	
 		}else {
 			currentNode=new Node(current);
@@ -93,6 +98,7 @@ public class Graphe implements Serializable{
 			
 
 		}
+		currentNode.setContent(currentContent);
 		this.isFullyExplored();
 		
 	}
@@ -102,6 +108,57 @@ public class Graphe implements Serializable{
 		}else {
 			
 		}
+	}
+
+	public String getClosestTreasure(String start) {
+		boolean found = false;
+		List<String> fifo = new ArrayList<String>();
+		List<String> listNodesVisited = new ArrayList<String>();
+		listNodesVisited.add(start);
+		fifo.add(start);
+		String currentNode = start;
+
+		while(!found && !fifo.isEmpty()){ // tant qu'on a pas trouvé de noeud but ou que il reste des noeuds à parcourir
+
+			currentNode = fifo.get(0);
+			fifo.remove(0);
+
+			HashSet<String> allFils = this.getNode(currentNode).getVoisins(); // récupération de la liste des fils
+			for(String fils : allFils){
+				if(!listNodesVisited.contains(fils)){ // si fils jamais visité dans le parcours
+					fifo.add(fils); // ajout du fils à la liste des noeuds à visiter
+					listNodesVisited.add(fils); // marquage du fils
+				}
+			}
+			found=this.getNode(currentNode).hasTreasure();			 // vérification si noeud courant est un noeud but
+			if(found) {
+				if(((CollectorAgent)this.myAgent).getType()=="NONE") {
+					found=true;
+				}else if(((CollectorAgent)this.myAgent).getType()==this.getNode(currentNode).typeTreasure()) {
+					found=true;
+				}else {
+					found=false;
+				}
+			}
+
+		}
+		if(found && currentNode != null){ 
+			return currentNode;
+		}
+		else{ 
+			return "";
+		}
+	}
+	public String getRandomNonExplore() {
+		Random rand=new Random();
+		ArrayList <String> tmpRd=new ArrayList <String>();
+		for(String n:noeudConnu.keySet()) {
+			if (!this.getNode(n).isVisited()) {
+				tmpRd.add(n);
+			}
+		}
+		int i=rand.nextInt(tmpRd.size());
+		return tmpRd.get(i);
 	}
 	
 	public String getClosestNonExplore(String start){
@@ -260,6 +317,19 @@ public class Graphe implements Serializable{
 	}
 	public String getPosition() {
 		return myPosition;
+	}
+	
+	public String getTankerNode() { //premier noeud le plus connexe
+		int max=0;
+		String toRet="";
+		for(String n:this.noeudConnu.keySet()) {
+			if (max<this.getNode(n).getVoisins().size()) {
+				max=this.getNode(n).getVoisins().size();
+				toRet=n;
+			}
+		}
+		
+		return toRet;
 	}
 	
 }

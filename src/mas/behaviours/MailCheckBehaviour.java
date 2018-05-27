@@ -6,6 +6,7 @@ import java.util.List;
 
 import env.Attribute;
 import env.Couple;
+import mas.agents.Agent;
 import mas.agents.ExploreAgent;
 import utilities.Graphe;
 
@@ -18,9 +19,9 @@ import jade.core.behaviours.OneShotBehaviour;;
 public class MailCheckBehaviour extends OneShotBehaviour {
 
 	private static final long serialVersionUID = -1935358198561959915L;
-	private ExploreAgent myAgent;
+	private Agent myAgent;
 	
-	public MailCheckBehaviour(ExploreAgent myAgent) {
+	public MailCheckBehaviour(Agent myAgent) {
 		super(myAgent);
 		this.myAgent = myAgent;
 	}

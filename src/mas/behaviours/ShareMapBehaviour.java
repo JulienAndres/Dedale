@@ -5,6 +5,7 @@ import java.util.List;
 
 import env.Attribute;
 import env.Couple;
+import mas.agents.Agent;
 import mas.agents.ExploreAgent;
 import jade.core.AID;
 import jade.core.behaviours.Behaviour;
@@ -15,9 +16,9 @@ import jade.lang.acl.ACLMessage;
 public class ShareMapBehaviour extends OneShotBehaviour{
 
 	private static final long serialVersionUID = -2379766870233405738L;
-	private ExploreAgent myAgent;
+	private Agent myAgent;
 	
-	public ShareMapBehaviour(ExploreAgent myAgent) {
+	public ShareMapBehaviour(Agent myAgent) {
 		super(myAgent);
 		this.myAgent=myAgent;
 	}

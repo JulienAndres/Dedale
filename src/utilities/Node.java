@@ -2,6 +2,11 @@ package utilities;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
+import env.Attribute;
+import java.util.Date;
+
+
 
 
 
@@ -13,13 +18,17 @@ public class Node implements Serializable{
 	private static final long serialVersionUID = -189730942693487917L;
 	private String id;
 	private HashSet<String> voisins;
-	private String treasure=null;
+	private int diamonds;
+	private int treasure;
+	private int valueTreasure;
 	private boolean visited=false;
+	private Date date;
 	
 	public Node(String id, HashSet<String> voisins, boolean visited, int timestamp) {
 		this.id=id;
 		this.voisins=voisins;
 		this.visited=visited;
+		this.date=new Date();
 	}
 	
 	public Node(String id) {
@@ -38,12 +47,30 @@ public class Node implements Serializable{
 		this.voisins = voisins;
 	}
 
-	public String getTreasure() {
-		return treasure;
+	public int getTreasure() {
+		return this.treasure;
+	}
+	public int getDiamonds() {
+		return this.diamonds;
+	}
+	public String typeTreasure() {
+		if(this.treasure>0 && this.diamonds==0) {
+			return "treasure";
+		}else if(this.treasure==0 && this.diamonds>0) {
+			return "diamonds";
+		}else {
+			return "both";
+		}
+	}
+	public boolean hasTreasure() {
+		return (this.treasure>0 || this.diamonds>0);
 	}
 
-	public void setTreasure(String treasure) {
-		this.treasure = treasure;
+	public void setValueTreasure(int value) {
+		this.valueTreasure=value;
+	}
+	public int getValueTreasure() {
+		return this.valueTreasure;
 	}
 
 	public boolean isVisited() {
@@ -69,6 +96,31 @@ public class Node implements Serializable{
 		for(String voisin:node.getVoisins()) {
 			this.voisins.add(voisin);//return true si le voisin n était pas dedans et que l ajout se fait.
 		}
+	}
+	
+	public void setContent(List<Attribute> content) {
+		boolean treasure = false;
+		boolean diamand = false;
+		for(Attribute attr:content){
+			if((attr.getName()=="Treasure")){
+				this.treasure=(int) attr.getValue();
+				treasure=true;
+			}
+			if(attr.getName()=="Diamonds") {
+				this.diamonds=(int) attr.getValue();
+				diamand=true;
+
+			}
+		}
+		
+		if(treasure == false){
+			this.treasure=0;
+			
+		}
+		if (diamand==false) {
+			this.diamonds=0;
+		}
+		this.date=new Date();
 	}
 	
 }

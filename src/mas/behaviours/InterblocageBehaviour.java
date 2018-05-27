@@ -6,6 +6,7 @@ import java.util.List;
 
 import env.Attribute;
 import env.Couple;
+import mas.agents.Agent;
 import mas.agents.ExploreAgent;
 import jade.core.AID;
 import jade.core.behaviours.Behaviour;
@@ -17,9 +18,9 @@ import jade.core.behaviours.OneShotBehaviour;;
 public class InterblocageBehaviour extends OneShotBehaviour {
 
 	private static final long serialVersionUID = -1935358198561959915L;
-	private ExploreAgent myAgent;
+	private Agent myAgent;
 	
-	public InterblocageBehaviour(ExploreAgent myAgent) {
+	public InterblocageBehaviour(Agent myAgent) {
 		super(myAgent);
 		this.myAgent = myAgent;
 	}
@@ -34,14 +35,12 @@ public class InterblocageBehaviour extends OneShotBehaviour {
 	        msg.setConversationId("interblocage");
 	        String pos = myAgent.getPath().get(0);//pos to go
 //	        int dist = dfs.distIntersection(mypos);
-//	        msg.setContent(dist + "");
+//	        msg.setCoééntent(dist + "");
 	        msg.setContent(pos + "");
 	        ArrayList<AID>  receivers=myAgent.getAllAgent();
 	        for(AID aid: receivers){
 	            msg.addReceiver(aid);
 	        }
-
-
 			
 		}
 

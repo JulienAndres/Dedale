@@ -11,8 +11,10 @@ import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
+import mas.agents.CollectorAgent;
 import mas.agents.DummyExploAgent;
 import mas.agents.ExploreAgent;
+import mas.agents.TankerAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +38,7 @@ public class Principal {
 
 		System.out.println("Hello !");
 		//0) Create the real environment and the observed one
-		//env= new Environment(ENVtype.GRID_T,2,null);
+//		env= new Environment(ENVtype.GRID_T,2,null);
 		//env= new Environment(ENVtype.DOROGOVTSEV_T,15,null);
 		env=new Environment("ressources/map2017-2","ressources/map2017-config");
 		
@@ -228,9 +230,9 @@ public class Principal {
 //
 //
 		//Agent0 on container0
-		for(int i=0;i<3;i++) {
+		for(int i=0;i<2;i++) {
 			c = containerList.get("container0");
-			agentName="Agent"+i;
+			agentName="AgentExplore"+i;
 			try {
 
 				Object[] objtab=new Object[]{env,EntityType.AGENT_EXPLORER};//used to give informations to the agent
@@ -244,20 +246,22 @@ public class Principal {
 		}
 
 //
-////
-//		c = containerList.get("container0");
-//		agentName="Agent2";
-//		try {
-//
-//
-//			Object[] objtab=new Object[]{env};//used to give informations to the agent
-//			AgentController	ag=c.createNewAgent(agentName,ExploreAgent.class.getName(),objtab);
-//			agentList.add(ag);
-//			System.out.println(agentName+" launched");
-//		} catch (StaleProxyException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+	for (int i=0;i<1;i++){
+//		
+		c = containerList.get("container0");
+		agentName="AgentCollector"+i;
+		try {
+
+
+			Object[] objtab=new Object[]{env,EntityType.AGENT_COLLECTOR};//used to give informations to the agent
+			AgentController	ag=c.createNewAgent(agentName,CollectorAgent.class.getName(),objtab);
+			agentList.add(ag);
+			System.out.println(agentName+" launched");
+		} catch (StaleProxyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 //		
 		
 //		//Agent0 on container0

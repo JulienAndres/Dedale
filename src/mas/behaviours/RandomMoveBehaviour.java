@@ -7,6 +7,7 @@ import env.Attribute;
 
 import env.Couple;
 import jade.core.behaviours.OneShotBehaviour;
+import mas.agents.Agent;
 import mas.agents.ExploreAgent;
 
 /**************************************
@@ -21,7 +22,7 @@ import mas.agents.ExploreAgent;
 public class RandomMoveBehaviour extends OneShotBehaviour {
 
 	private static final long serialVersionUID = 9088209402507795289L;
-	public RandomMoveBehaviour (ExploreAgent myagent) {
+	public RandomMoveBehaviour (Agent myagent) {
 		super(myagent);
 	}
 

@@ -22,24 +22,18 @@ import env.Environment;
 import mas.abstractAgent;
 import mas.behaviours.*;
 
-/**
- * This method is automatically called when "agent".start() is executed.
- * Consider that Agent is launched for the first time. 
- * 			1) set the agent attributes 
- *	 		2) add the behaviours
- *          
- */
 
-public class ExploreAgent extends Agent{
-
+public class TankerAgent extends Agent{
+	private boolean targetfound;
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = -1784844593772918359L;
 
-	
-	
 	protected void setup(){
 
 		super.setup();
-		
+
 		//get the parameters given into the object[]. In the current case, the environment where the agent will evolve
 		final Object[] args = getArguments();
 		if(args!=null && args[0]!=null && args[1]!=null){
@@ -48,19 +42,23 @@ public class ExploreAgent extends Agent{
 			System.err.println("Malfunction during parameter's loading of agent"+ this.getClass().getName());
 			System.exit(-1);
 		}
-		this.map=new Graphe(this);
+		
 		cptBlock=0;
+		this.map=new Graphe(this);
 		path=new ArrayList<String>();
 		FSMBehaviour f= new FSMBehaviour();
 		f.registerFirstState(new ObserveBehaviour(this), "observe");
 		f.registerState(new MailCheckBehaviour(this), "mailcheck");
 		f.registerState(new MoveBehaviour(this), "Deplacement");
 		f.registerState(new ShareMapBehaviour(this), "sharemap");
+		f.registerState(new RandomMoveBehaviour(this), "randomMove");
 		
 		f.registerDefaultTransition("observe", "mailcheck");		
 		f.registerDefaultTransition("mailcheck", "Deplacement");
 		f.registerDefaultTransition("Deplacement", "sharemap");
 		f.registerDefaultTransition("sharemap", "observe");
+		f.registerTransition("Deplacement", "randomMove", 2);
+		f.registerDefaultTransition("randomMove", "sharemap");
 
 		addBehaviour(f);
 
@@ -69,7 +67,7 @@ public class ExploreAgent extends Agent{
 		dfd.setName(getAID());
 		
 		ServiceDescription sd = new ServiceDescription();
-		sd.setType("EXPLORE");
+		sd.setType("TANKER");
 		sd.setName(getLocalName());
 		dfd.addServices(sd);
 		try {
@@ -82,12 +80,17 @@ public class ExploreAgent extends Agent{
 		System.out.println("the agent "+this.getLocalName()+ " is started");
 
 	}
+	public boolean isTargetFound() {
+		return this.targetfound;
+	}
+	public void setTargetFound(boolean a) {
+		this.targetfound=a;
+	}
 
 	/**
 	 * This method is automatically called after doDelete()
 	 */
 	protected void takeDown(){
+
 	}
-
-
 }
