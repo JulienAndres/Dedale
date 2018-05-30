@@ -2,6 +2,7 @@ package mas.agents;
 
 import utilities.*;
 import jade.core.AID;
+import jade.core.behaviours.DataStore;
 import jade.core.behaviours.FSMBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
@@ -38,6 +39,7 @@ public class Agent extends abstractAgent{
 	protected Graphe map;
 	protected List<String> path;
 	protected int cptBlock;
+	protected boolean solveInterblockage;
 
 	
 	
@@ -45,6 +47,7 @@ public class Agent extends abstractAgent{
 
 		super.setup();
 		cptBlock=0;
+		solveInterblockage=false;
 		
 		//get the parameters given into the object[]. In the current case, the environment where the agent will evolve
 		final Object[] args = getArguments();
@@ -60,8 +63,18 @@ public class Agent extends abstractAgent{
 	public Graphe getGraphe() {
 		return map;
 	}
+	public boolean getsolveblockage() {
+		return this.solveInterblockage;
+	}
+	public void setsolveblockage(boolean b) {
+		this.solveInterblockage=b;
+	}
+	
 	public List<String> getPath() {
 		return this.path;
+	}
+	public String getGoal() {
+		return this.path.get(this.path.size()-1);
 	}
 	
 	public void doPath(ArrayList<String> path) {
@@ -80,13 +93,60 @@ public class Agent extends abstractAgent{
 		}
 
 	}
-	//Return AID of all except his own
+	//Return AID of all collectors
+	public ArrayList<AID>  getCollectAgent() {
+		DFAgentDescription dfd = new DFAgentDescription();
+		ServiceDescription sd = new ServiceDescription();
+		sd.setType("COLLECT");
+		dfd.addServices(sd);
+		ArrayList<AID> agents = new ArrayList<AID>();
+		try {
+			DFAgentDescription[] result = DFService.search(this, dfd);
+			for(DFAgentDescription agent:result){
+					agents.add(agent.getName());
+			}
+			
+		} catch (FIPAException e) {
+			e.printStackTrace();
+		}
+		return agents;
+	}
 	public ArrayList<AID>  getAllAgent() {
 		DFAgentDescription dfd = new DFAgentDescription();
 		ServiceDescription sd = new ServiceDescription();
 		sd.setType("EXPLORE");
 		dfd.addServices(sd);
 		ArrayList<AID> agents = new ArrayList<AID>();
+		try {
+			DFAgentDescription[] result = DFService.search(this, dfd);
+			for(DFAgentDescription agent:result){
+				if(!this.getAID().toString().equals(agent.getName().toString())){
+					agents.add(agent.getName());
+
+				}
+			}
+			
+		} catch (FIPAException e) {
+			e.printStackTrace();
+		}
+		
+		sd.setType("COLLECT");
+		dfd.addServices(sd);
+		try {
+			DFAgentDescription[] result = DFService.search(this, dfd);
+			for(DFAgentDescription agent:result){
+				if(!this.getAID().toString().equals(agent.getName().toString())){
+					agents.add(agent.getName());
+
+				}
+			}
+			
+		} catch (FIPAException e) {
+			e.printStackTrace();
+		}
+		
+		sd.setType("TANKER");
+		dfd.addServices(sd);
 		try {
 			DFAgentDescription[] result = DFService.search(this, dfd);
 			for(DFAgentDescription agent:result){
@@ -130,11 +190,26 @@ public class Agent extends abstractAgent{
 public void resetBlock() {
 	this.cptBlock=0;
 }
+public void decBlock() {
+	this.cptBlock-=1;
+	if (this.cptBlock<0){
+		this.cptBlock=0;
+	}
+}
 public void incBlock() {
 	this.cptBlock+=1;
+	if(this.cptBlock>15) {
+		this.cptBlock=15;
+	}
 }
 public boolean isBlocked() { //return true si bloqué
 	return this.cptBlock>=5;
+}
+public boolean blockRandom() {
+	return this.cptBlock>=14;
+}
+public int getcptblock() {
+	return this.cptBlock;
 }
 
 	/**

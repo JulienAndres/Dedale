@@ -20,6 +20,7 @@ public class MailCheckBehaviour extends OneShotBehaviour {
 
 	private static final long serialVersionUID = -1935358198561959915L;
 	private Agent myAgent;
+	int onEnd;
 	
 	public MailCheckBehaviour(Agent myAgent) {
 		super(myAgent);
@@ -28,6 +29,7 @@ public class MailCheckBehaviour extends OneShotBehaviour {
 	
 	@Override
 	public void action() {
+		onEnd=0;
 		String myPosition=((mas.abstractAgent)this.myAgent).getCurrentPosition();
 		if (myPosition=="") return;
 
@@ -49,6 +51,8 @@ public class MailCheckBehaviour extends OneShotBehaviour {
 
 				if (newMap!=null) {
 					myAgent.getGraphe().sync(graphe);
+					myAgent.getGraphe().syncUpdater(graphe);
+					setOnEnd(graphe);
 					//System.out.println("syncronisation "+myAgent.getLocalName());
 				}
 			} catch (UnreadableException e) {
@@ -57,14 +61,25 @@ public class MailCheckBehaviour extends OneShotBehaviour {
 			}
 		}else {
 			//System.out.println("pas de msg");
+			if (myAgent.isBlocked()){
+//				System.out.println("blocage sans msg");
+			}
 		}
 
 	}
 
-
+	public void setOnEnd(Graphe graphe) {
+		if(myAgent.getGraphe().isFullyExplored() || (graphe.isFullyExplored() && graphe.isUpdater()) || (myAgent.getGraphe().isFullyExplored()  && myAgent.getGraphe().isUpdater())) {
+			onEnd=0;
+			return;
+		}else {
+			onEnd=5;
+			return;
+		}
+	}
 	
 	public int onEnd(){
-		return 1;
+		return onEnd;
 
 	}
 

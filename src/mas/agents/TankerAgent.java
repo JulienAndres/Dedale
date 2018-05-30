@@ -54,6 +54,7 @@ public class TankerAgent extends Agent{
 		f.registerState(new RandomMoveBehaviour(this), "randomMove");
 		
 		f.registerDefaultTransition("observe", "mailcheck");		
+		f.registerTransition("observe", "randomMove", 20);
 		f.registerDefaultTransition("mailcheck", "Deplacement");
 		f.registerDefaultTransition("Deplacement", "sharemap");
 		f.registerDefaultTransition("sharemap", "observe");

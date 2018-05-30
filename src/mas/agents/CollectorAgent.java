@@ -33,6 +33,7 @@ public class CollectorAgent extends Agent{
 	private int capacity;
 	private String type;
 	private String tankerName="";
+	private boolean search;
 	
 	protected void setup(){
 
@@ -50,23 +51,34 @@ public class CollectorAgent extends Agent{
         capacity = this.getBackPackFreeSpace();
         type="NONE";
 		cptBlock=0;
+		search=true;
 		this.map=new Graphe(this);
 		path=new ArrayList<String>();
 		FSMBehaviour f= new FSMBehaviour();
 		f.registerFirstState(new ObserveBehaviour(this), "observe");
+//		f.registerDefaultTransition(s1, s2);
 		f.registerState(new MailCheckBehaviour(this), "mailcheck");
 		f.registerState(new MoveBehaviour(this), "Deplacement");
 		f.registerState(new ShareMapBehaviour(this), "sharemap");
 		f.registerState(new PickBehaviour(this), "pick");
-		
+		f.registerState(new RandomMoveBehaviour(this), "randomMove");
+
+		f.registerTransition("observe", "randomMove", 20); //interblocage extreme
+		f.registerDefaultTransition("randomMove", "observe");
+
 		f.registerDefaultTransition("observe", "mailcheck");
 		f.registerTransition("observe", "pick", 5);
+		
 		f.registerDefaultTransition("pick", "observe");
+		
 		f.registerDefaultTransition("mailcheck", "Deplacement");
+		
 		f.registerDefaultTransition("Deplacement", "sharemap");
+		
 		f.registerDefaultTransition("sharemap", "observe");
 
 		addBehaviour(f);
+		System.out.println("ICI");
 
 		
 		DFAgentDescription dfd = new DFAgentDescription();
@@ -82,9 +94,22 @@ public class CollectorAgent extends Agent{
 			e.printStackTrace();
 		}
 		doWait(2000);
-
+		setTankerName();
+		this.type=this.getMyTreasureType();
+		System.out.println(this.getMyTreasureType());
+		System.out.println(tankerName);
+		System.out.println(this.getBackPackFreeSpace());
 		System.out.println("the agent "+this.getLocalName()+ " is started");
 
+	}
+	public String getTankerName() {
+		return this.tankerName;
+	}
+	public void setSearch(boolean b) {
+		this.search=b;
+	}
+	public boolean getSearch() {
+		return this.search;
 	}
 	public void setTreasure() {
 		this.type="treasure";
@@ -102,10 +127,10 @@ public class CollectorAgent extends Agent{
 		if (this.type=="NONE") {
 			return true;
 		}
-		if (this.type=="diamonds"){
+		if (this.type=="Diamonds"){
 			return n.getDiamonds()>0;
 		}
-		if (this.type=="treasure") {
+		if (this.type=="Treasure") {
 			return n.getTreasure()>0;
 		}
 		return false;
@@ -114,13 +139,15 @@ public class CollectorAgent extends Agent{
 		if(sucess) {
 			this.path.remove(0);
 		}
-		this.emptyMyBackPack(tankerName);
+		boolean b=((abstractAgent)this).emptyMyBackPack(tankerName);
+		System.out.println("empty sac"+b);
 
 	}
 	public int getCapacity() {
 		return capacity;
 	}
 	public void setTankerName() {
+//		if(0==0) return;
         DFAgentDescription dfd = new DFAgentDescription();
         ServiceDescription sd = new ServiceDescription();
         sd.setType("TANKER");

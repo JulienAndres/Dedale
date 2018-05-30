@@ -31,7 +31,7 @@ public class PickBehaviour extends OneShotBehaviour {
 		int diamand=myAgent.getGraphe().getNode(myPosition).getDiamonds();
 		int treasure=myAgent.getGraphe().getNode(myPosition).getTreasure();
 		System.out.println(freeSpace);
-		((mas.abstractAgent)this.myAgent).pick();
+		System.out.println(((mas.abstractAgent)this.myAgent).pick());
 		
 
 		if(freeSpace==((mas.abstractAgent)this.myAgent).getBackPackFreeSpace()){

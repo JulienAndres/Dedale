@@ -12,6 +12,8 @@ import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
 import mas.agents.CollectorAgent;
+import mas.agents.Dummy;
+import mas.agents.CollectorAgent;
 import mas.agents.DummyExploAgent;
 import mas.agents.ExploreAgent;
 import mas.agents.TankerAgent;
@@ -40,8 +42,8 @@ public class Principal {
 		//0) Create the real environment and the observed one
 //		env= new Environment(ENVtype.GRID_T,2,null);
 		//env= new Environment(ENVtype.DOROGOVTSEV_T,15,null);
-		env=new Environment("ressources/map2017-2","ressources/map2017-config");
-		
+		env=new Environment("ressources/map2017-2","ressources/map2017-config-2");
+		System.out.println("ICI");
 		//1), create the platform (Main container (DF+AMS) + containers + monitoring agents : RMA and SNIFFER)
 		rt=emptyPlatform(containerList);
 
@@ -137,29 +139,29 @@ public class Principal {
 	 */
 	private static void createMonitoringAgents(ContainerController mc) {
 
-		System.out.println("Launching the rma agent on the main container ...");
-		AgentController rma;
+//		System.out.println("Launching the rma agent on the main container ...");
+//		AgentController rma;
+//
+//		try {
+//			rma = mc.createNewAgent("rma", "jade.tools.rma.rma", new Object[0]);
+//			rma.start();
+//		} catch (StaleProxyException e) {
+//			e.printStackTrace();
+//			System.out.println("Launching of rma agent failed");
+//		}
 
-		try {
-			rma = mc.createNewAgent("rma", "jade.tools.rma.rma", new Object[0]);
-			rma.start();
-		} catch (StaleProxyException e) {
-			e.printStackTrace();
-			System.out.println("Launching of rma agent failed");
-		}
-
-		System.out.println("Launching  Sniffer agent on the main container...");
-		AgentController snif=null;
-
-		try {
-			snif= mc.createNewAgent("sniffeur", "jade.tools.sniffer.Sniffer",new Object[0]);
-			snif.start();
-
-		} catch (StaleProxyException e) {
-			e.printStackTrace();
-			System.out.println("launching of sniffer agent failed");
-
-		}		
+//		System.out.println("Launching  Sniffer agent on the main container...");
+//		AgentController snif=null;
+//
+//		try {
+//			snif= mc.createNewAgent("sniffeur", "jade.tools.sniffer.Sniffer",new Object[0]);
+//			snif.start();
+//
+//		} catch (StaleProxyException e) {
+//			e.printStackTrace();
+//			System.out.println("launching of sniffer agent failed");
+//
+//		}		
 
 
 	}
@@ -230,13 +232,13 @@ public class Principal {
 //
 //
 		//Agent0 on container0
-		for(int i=0;i<2;i++) {
+		for(int i=0;i<1;i++) {
 			c = containerList.get("container0");
-			agentName="AgentExplore"+i;
+			agentName="Agent"+i;
 			try {
 
-				Object[] objtab=new Object[]{env,EntityType.AGENT_EXPLORER};//used to give informations to the agent
-				AgentController	ag=c.createNewAgent(agentName,ExploreAgent.class.getName(),objtab);
+				Object[] objtab=new Object[]{env,EntityType.AGENT_TANKER};//used to give informations to the agent
+				AgentController	ag=c.createNewAgent(agentName,TankerAgent.class.getName(),objtab);
 				agentList.add(ag);
 				System.out.println(agentName+" launched");
 			} catch (StaleProxyException e) {
@@ -246,7 +248,7 @@ public class Principal {
 		}
 
 //
-	for (int i=0;i<1;i++){
+	for (int i=0;i<3;i++){
 //		
 		c = containerList.get("container0");
 		agentName="AgentCollector"+i;
@@ -255,6 +257,22 @@ public class Principal {
 
 			Object[] objtab=new Object[]{env,EntityType.AGENT_COLLECTOR};//used to give informations to the agent
 			AgentController	ag=c.createNewAgent(agentName,CollectorAgent.class.getName(),objtab);
+			agentList.add(ag);
+			System.out.println(agentName+" launched");
+		} catch (StaleProxyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	for (int i=0;i<3;i++){
+//		
+		c = containerList.get("container0");
+		agentName="AgentExplore"+i;
+		try {
+
+
+			Object[] objtab=new Object[]{env,EntityType.AGENT_EXPLORER};//used to give informations to the agent
+			AgentController	ag=c.createNewAgent(agentName,ExploreAgent.class.getName(),objtab);
 			agentList.add(ag);
 			System.out.println(agentName+" launched");
 		} catch (StaleProxyException e) {

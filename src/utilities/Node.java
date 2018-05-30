@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import env.Attribute;
+
 import java.util.Date;
 
 
@@ -33,6 +34,7 @@ public class Node implements Serializable{
 	
 	public Node(String id) {
 		this(id, new HashSet<String>(), false, 0);
+		this.date=new Date();
 	}
 
 	public String getId() {
@@ -96,6 +98,11 @@ public class Node implements Serializable{
 		for(String voisin:node.getVoisins()) {
 			this.voisins.add(voisin);//return true si le voisin n était pas dedans et que l ajout se fait.
 		}
+		if(this.date.before(node.getDate())) {
+			this.treasure=node.getTreasure();
+			this.diamonds=node.getDiamonds();
+		}
+		
 	}
 	
 	public void setContent(List<Attribute> content) {
@@ -121,6 +128,9 @@ public class Node implements Serializable{
 			this.diamonds=0;
 		}
 		this.date=new Date();
+	}
+	public Date getDate() {
+		return this.date;
 	}
 	
 }

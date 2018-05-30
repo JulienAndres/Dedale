@@ -12,10 +12,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-
+import java.util.Date;
 
 import env.Attribute;
 import env.Couple;
+import jade.core.AID;
 
 public class Graphe implements Serializable{
 
@@ -25,22 +26,73 @@ public class Graphe implements Serializable{
 	private static final long serialVersionUID = 3325106123595323118L;
 	private boolean fullyExplored;
 	private HashMap<String,Node> noeudConnu;
+	private HashMap<String,Couple<String,Integer>> otherAgent;
 	private transient Agent myAgent;
 	private String myPosition;
+	
+	private boolean isUpdater;
+	private String Updater;
+	private Date UpdaterStart;
+	
+	
 	
 	public  Graphe(ExploreAgent myAgent,HashMap<String,Node> noeudConnu,boolean fullyExplored) {
 		this.fullyExplored=fullyExplored;
 		this.noeudConnu=noeudConnu;
 		this.myAgent=myAgent;
 		this.myPosition="";
+		this.Updater=myAgent.getName();
+		this.UpdaterStart=new Date();
+		this.isUpdater=true;
+		initOtherCollect();
 	}
 	public Graphe(Agent myAgent) {
 		this.myAgent=myAgent;
 		this.fullyExplored=false;
 		this.noeudConnu=new HashMap<String,Node>();
 		this.myPosition="";
+		this.Updater=myAgent.getName();
+		this.UpdaterStart=new Date();
+		this.isUpdater=true;
+		initOtherCollect();
+		if(myAgent instanceof ExploreAgent) {
+			Random r = new Random();
+			this.UpdaterStart=new Date(r.nextInt(Integer.MAX_VALUE));
+
+		}else {
+			this.UpdaterStart=new Date(Long.MAX_VALUE);
+
+		}
+
 	}
-	
+	public void initOtherCollect() {
+		ArrayList<AID> list = myAgent.getCollectAgent();
+		otherAgent= new HashMap<String,Couple<String,Integer>>();
+		for (AID a:list) {
+			
+			if (a.getLocalName().equals(myAgent.getLocalName())){
+				Couple <String,Integer>tmp=new Couple<>(((CollectorAgent) myAgent).getType(),((CollectorAgent) myAgent).getCapacity());
+				otherAgent.put(a.getLocalName(), tmp);
+			}else {
+				Couple <String,Integer>tmp=new Couple<>("NONE",-1);
+				otherAgent.put(a.getLocalName(), tmp);
+			}
+		}
+		return;
+	}
+	public HashMap<String,Couple<String,Integer>> getOtherAgent() {
+		return this.otherAgent;
+	}
+	public boolean isUpdater() {
+		return this.isUpdater;
+	}
+	public String getUpdater() {
+		return this.Updater;
+	}
+
+	public Date getUpdaterDate() {
+		return this.UpdaterStart;
+	}
 	public boolean isFullyExplored() {
 		if (fullyExplored) {
 			return true;
@@ -54,6 +106,20 @@ public class Graphe implements Serializable{
 		}
 		fullyExplored=true;
 		return true;
+	}
+	public String getOldestTreasure() {
+		Date oldest=new Date(Long.MAX_VALUE);
+		String old="";
+		for(String n:noeudConnu.keySet()) {
+			if(noeudConnu.get(n).hasTreasure() && noeudConnu.get(n).getDate().before(oldest)) {
+				oldest=noeudConnu.get(n).getDate();
+				old=n;
+//				System.out.print("TREASURE FOUND");
+			}
+		}
+//		System.out.println(old);
+		return old;
+		
 	}
 	
 	public void updateFomObserve(List<Couple<String,List<Attribute>>> lobs) {
@@ -109,6 +175,54 @@ public class Graphe implements Serializable{
 			
 		}
 	}
+	public String getBestTreasure() {
+		if (!this.hasTreasure()) {
+			System.out.println("PLUS DE TRESOR");
+		}
+		float ratio=0;
+		String best="";
+		float ratio_bad=Float.MAX_VALUE;
+		String best_bad="";
+		for(String n:noeudConnu.keySet()) {
+			if(this.getNode(n).hasTreasure() ) {
+				if(((CollectorAgent) this.myAgent).getType()=="Diamonds") {
+					float ratiotmp=this.getNode(n).getDiamonds()/(float)((CollectorAgent) this.myAgent).getCapacity();
+					if (ratiotmp>1) {
+						if (ratiotmp<ratio_bad) {
+							ratio_bad=ratiotmp;
+							best_bad=n;
+						}
+					}else {
+						if (ratiotmp > ratio){
+							ratio=ratiotmp;
+							best=n;
+						}
+					}
+				}else {
+					float ratiotmp=this.getNode(n).getTreasure()/(float)((CollectorAgent) this.myAgent).getCapacity();
+					if (ratiotmp>1) {
+						if (ratiotmp<ratio_bad) {
+							ratio_bad=ratiotmp;
+							best_bad=n;
+						}
+					}else {
+						if (ratiotmp > ratio){
+							ratio=ratiotmp;
+							best=n;
+						}
+					}
+					
+				}
+			}
+		}
+		if (best=="") {
+			return  best_bad;
+		}else {
+			return best;
+		}
+		
+	}
+
 
 	public String getClosestTreasure(String start) {
 		boolean found = false;
@@ -149,6 +263,15 @@ public class Graphe implements Serializable{
 			return "";
 		}
 	}
+	public boolean hasTreasure() {
+		for(String n:noeudConnu.keySet()) {
+			if(this.getNode(n).hasTreasure()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public String getRandomNonExplore() {
 		Random rand=new Random();
 		ArrayList <String> tmpRd=new ArrayList <String>();
@@ -156,6 +279,17 @@ public class Graphe implements Serializable{
 			if (!this.getNode(n).isVisited()) {
 				tmpRd.add(n);
 			}
+		}
+		int i=rand.nextInt(tmpRd.size());
+		return tmpRd.get(i);
+	}
+	
+	public String getRandom() {
+		Random rand=new Random();
+		ArrayList <String> tmpRd=new ArrayList <String>();
+		for(String n:noeudConnu.keySet()) {
+				tmpRd.add(n);
+			
 		}
 		int i=rand.nextInt(tmpRd.size());
 		return tmpRd.get(i);
@@ -255,9 +389,6 @@ public class Graphe implements Serializable{
 		if (voisins.size()==1) {//cul de sac
 			return -1;
 		}
-		if (voisins.size()>2) {
-			return -2;
-		}
 		while(voisins.size()==2) {
 			tmp=current;
 			toRet++;
@@ -269,9 +400,12 @@ public class Graphe implements Serializable{
 			intersection=tmp;
 			voisins=noeudConnu.get(current).getVoisins();
 		}
-		
+		if (voisins.size()==1) {//cul de sac
+			return -1;
+		}
 		return toRet;
 	}
+	
 	public void sync(Graphe graphe) {
 		for (String id:graphe.getIds()) {
 			if(this.contains(id)) {//maj du node s il existe
@@ -281,7 +415,33 @@ public class Graphe implements Serializable{
 				
 			}
 		}
+		this.isFullyExplored();
 		return;
+	}
+	public void syncUpdater(Graphe graphe) {
+		if(this.UpdaterStart.after(graphe.getUpdaterDate())) {
+			this.UpdaterStart=graphe.getUpdaterDate();
+			this.Updater=graphe.getUpdater();
+		}
+		if(this.Updater.equals(myAgent.getName())){
+			this.isUpdater=true;
+		}else {
+			this.isUpdater=false;
+		}
+		syncCollect(graphe);
+	}
+	
+	public void syncCollect(Graphe graphe) {
+		for (String tmp1:this.otherAgent.keySet()) {
+			if(this.otherAgent.get(tmp1).getLeft()=="NONE") {
+				if(graphe.getOtherAgent().get(tmp1).getLeft()!="NONE") {
+					this.otherAgent.remove(tmp1);
+					Couple<String,Integer>tmp=new Couple<>(graphe.getOtherAgent().get(tmp1).getLeft(),graphe.getOtherAgent().get(tmp1).getRight());
+					this.otherAgent.put(tmp1,tmp);
+				}
+
+			}
+		}
 	}
 	public void resetGraphe() {
 		fullyExplored=false;
