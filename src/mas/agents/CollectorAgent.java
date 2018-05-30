@@ -102,6 +102,15 @@ public class CollectorAgent extends Agent{
 		System.out.println("the agent "+this.getLocalName()+ " is started");
 
 	}
+	public boolean isUsefull() {
+		if (this.type=="Treasure") {
+			return this.getGraphe().containTreasure();
+		}else {
+			return this.getGraphe().containDiamonds();
+			
+		}
+		
+	}
 	public String getTankerName() {
 		return this.tankerName;
 	}

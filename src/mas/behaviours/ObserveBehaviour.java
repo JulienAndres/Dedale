@@ -26,7 +26,13 @@ public class ObserveBehaviour extends OneShotBehaviour {
 	
 	@Override
 	public void action() {
-		
+		if (myAgent instanceof CollectorAgent){
+			System.out.println("still treasure?"+((CollectorAgent) myAgent).isUsefull());
+			if (!((CollectorAgent) myAgent).isUsefull()){
+				
+			}
+
+		}
 		String myPosition=((mas.abstractAgent)this.myAgent).getCurrentPosition();
 
 		if (myPosition!=""){

@@ -107,6 +107,33 @@ public class Graphe implements Serializable{
 		fullyExplored=true;
 		return true;
 	}
+	public boolean containTreasure() {
+		if(!this.isFullyExplored()) {
+			return true;
+		}
+		for(String n:noeudConnu.keySet()) {
+			if (this.getNode(n).getTreasure()>0){
+				return true;
+			}
+		}
+		
+		
+		return false;
+	}
+	public boolean containDiamonds() {
+		if(!this.isFullyExplored()) {
+			return true;
+		}
+		for(String n:noeudConnu.keySet()) {
+			if (this.getNode(n).getDiamonds()>0){
+				return true;
+			}
+		}
+		
+		
+		return false;
+		
+	}
 	public String getOldestTreasure() {
 		Date oldest=new Date(Long.MAX_VALUE);
 		String old="";

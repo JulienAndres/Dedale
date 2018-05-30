@@ -34,22 +34,6 @@ public class PickBehaviour extends OneShotBehaviour {
 		System.out.println(((mas.abstractAgent)this.myAgent).pick());
 		
 
-		if(freeSpace==((mas.abstractAgent)this.myAgent).getBackPackFreeSpace()){
-			
-			if(treasure==0 && diamand>0){
-				this.myAgent.setTreasure();
-			}
-			else{
-				this.myAgent.setDiamonds();
-			}
-		}else {
-			if(diamand>0 && treasure==0) {
-				this.myAgent.setDiamonds();
-			}
-			if(treasure>0 && diamand==0) {
-				this.myAgent.setTreasure();
-			}
-		}
 		
 //		try {
 //			System.out.println("Press Enter in the console to allow the agent "+this.myAgent.getLocalName() +" to continue");

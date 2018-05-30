@@ -248,7 +248,7 @@ public class Principal {
 		}
 
 //
-	for (int i=0;i<3;i++){
+	for (int i=0;i<1;i++){
 //		
 		c = containerList.get("container0");
 		agentName="AgentCollector"+i;
@@ -264,7 +264,7 @@ public class Principal {
 			e.printStackTrace();
 		}
 	}
-	for (int i=0;i<3;i++){
+	for (int i=0;i<0;i++){
 //		
 		c = containerList.get("container0");
 		agentName="AgentExplore"+i;
