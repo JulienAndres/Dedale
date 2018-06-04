@@ -32,7 +32,12 @@ public class MoveBehaviour extends OneShotBehaviour{
 			
 			if (!myAgent.getGraphe().isFullyExplored()) {
 				if (this.myAgent instanceof TankerAgent){
-					System.out.println("tanker explore");
+//					System.out.println("tanker explore");
+				}
+				if (this.myAgent instanceof CollectorAgent) {
+					System.out.println("exploretime "+((CollectorAgent) myAgent).getCptExplore());
+					((CollectorAgent) myAgent).incCptExplore();
+
 				}
 //				System.out.println("exploration");
 				this.exploration(myPosition);
@@ -112,6 +117,11 @@ public class MoveBehaviour extends OneShotBehaviour{
 						String target=myAgent.getGraphe().getBestTreasure();
 						if(target=="") {
 							target=myAgent.getGraphe().getClosestTreasure(myPosition);
+						}
+						if (target=="") {
+							System.out.println("RIEN A FAIRE");
+							exploration(myPosition);
+							return;
 						}
 						System.out.println(((CollectorAgent) myAgent).getType());
 						System.out.println("besttresor :  " +target);

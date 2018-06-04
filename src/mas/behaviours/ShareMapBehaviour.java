@@ -32,7 +32,9 @@ public class ShareMapBehaviour extends OneShotBehaviour{
 		msg.setSender(this.myAgent.getAID());
 		msg.setConversationId("map");
 		if (myPosition.equals("")) return;
-		
+//		if (myAgent.getGraphe().getOtherAgent().isEmpty()){
+//			myAgent.getGraphe().initOtherCollect();
+//		}
 		try {
 			msg.setContentObject(myAgent.getGraphe());
 		} catch (IOException e) {

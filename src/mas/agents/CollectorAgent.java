@@ -33,6 +33,7 @@ public class CollectorAgent extends Agent{
 	private int capacity;
 	private String type;
 	private String tankerName="";
+	private int cptexplore;
 	private boolean search;
 	
 	protected void setup(){
@@ -47,8 +48,9 @@ public class CollectorAgent extends Agent{
 			System.err.println("Malfunction during parameter's loading of agent"+ this.getClass().getName());
 			System.exit(-1);
 		}
-		
+		cptexplore=0;
         capacity = this.getBackPackFreeSpace();
+		setTankerName();
         type="NONE";
 		cptBlock=0;
 		search=true;
@@ -111,6 +113,12 @@ public class CollectorAgent extends Agent{
 		}
 		
 	}
+	public int getCptExplore() {
+		return this.cptexplore;
+	}
+	public void incCptExplore() {
+		this.cptBlock++;
+	}
 	public String getTankerName() {
 		return this.tankerName;
 	}
@@ -162,7 +170,7 @@ public class CollectorAgent extends Agent{
         sd.setType("TANKER");
         dfd.addServices(sd);
         DFAgentDescription[] results;
-
+//        if (0==0) {return;}
         while(this.tankerName == "") {
             try {
                 results = DFService.search(this, dfd);

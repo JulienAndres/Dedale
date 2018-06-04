@@ -90,11 +90,15 @@ public class ObserveBehaviour extends OneShotBehaviour {
 					return 5;
 				}
 			}
+			
+			
 		}
-//		if (myAgent.isBlocked()){
-////			System.out.println(myAgent.getcptblock());
-//			return 2;
-//		}
+		
+		if (myAgent.isBlocked()){
+//			System.out.println(myAgent.getcptblock());
+			return 2;
+		}
+		
 		if(myAgent instanceof TankerAgent && myAgent.getGraphe().isFullyExplored()) {
 			System.out.println("tanker full explore" );
 			return 10;

@@ -49,7 +49,7 @@ public class ExploreAgent extends Agent{
 			System.err.println("Malfunction during parameter's loading of agent"+ this.getClass().getName());
 			System.exit(-1);
 		}
-		doWait(2000);
+		doWait(4000);
 
 		this.searchTreasure=false;
 		this.nbAlea=0;

@@ -15,6 +15,7 @@ import mas.agents.CollectorAgent;
 import mas.agents.Dummy;
 import mas.agents.CollectorAgent;
 import mas.agents.DummyExploAgent;
+import mas.agents.DummyWumpusShift;
 import mas.agents.ExploreAgent;
 import mas.agents.TankerAgent;
 
@@ -42,8 +43,9 @@ public class Principal {
 		//0) Create the real environment and the observed one
 //		env= new Environment(ENVtype.GRID_T,2,null);
 		//env= new Environment(ENVtype.DOROGOVTSEV_T,15,null);
-		env=new Environment("ressources/map2017-2","ressources/map2017-config-2");
-		System.out.println("ICI");
+//		env=new Environment("ressources/map2017-2","ressources/map2017-config-2");
+//		env=new Environment("ressources/mapInterblockage","ressources/mapInterblocage-config");
+		env=new Environment("ressources/map2018","ressources/map2018-multiType-exam");
 		//1), create the platform (Main container (DF+AMS) + containers + monitoring agents : RMA and SNIFFER)
 		rt=emptyPlatform(containerList);
 
@@ -187,71 +189,36 @@ public class Principal {
 		String agentName;
 		List<AgentController> agentList=new ArrayList<AgentController>();
 
-//		//wumpus on container0
-//		c = containerList.get("container0");
-//		agentName="Golem";
-//		try {
-//
-//
-//			Object[] objtab=new Object[]{env,agentName};//used to give informations to the agent
-//			AgentController	ag=c.createNewAgent(agentName,DummyWumpusAgent.class.getName(),objtab);
-//			agentList.add(ag);
-//			System.out.println(agentName+" launched");
-//		} catch (StaleProxyException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-
-//		agentName="Wumpus2";
-//		try {
-//
-//
-//			Object[] objtab=new Object[]{env,agentName};//used to give informations to the agent
-//			AgentController	ag=c.createNewAgent(agentName,DummyAgentWumpus.class.getName(),objtab);
-//			agentList.add(ag);
-//			System.out.println(agentName+" launched");
-//		} catch (StaleProxyException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//
-//		//wumpus on container0
-//		c = containerList.get("container0");
-//		agentName="Wumpus3";
-//		try {
-//
-//
-//			Object[] objtab=new Object[]{env,agentName};//used to give informations to the agent
-//			AgentController	ag=c.createNewAgent(agentName,DummyAgentWumpus.class.getName(),objtab);
-//			agentList.add(ag);
-//			System.out.println(agentName+" launched");
-//		} catch (StaleProxyException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//
-//
 		//Agent0 on container0
-		for(int i=0;i<1;i++) {
-			c = containerList.get("container0");
-			agentName="Agent"+i;
-			try {
+		c = containerList.get("container0");
+		agentName="Tank";
+		try {
 
-				Object[] objtab=new Object[]{env,EntityType.AGENT_TANKER};//used to give informations to the agent
-				AgentController	ag=c.createNewAgent(agentName,TankerAgent.class.getName(),objtab);
-				agentList.add(ag);
-				System.out.println(agentName+" launched");
-			} catch (StaleProxyException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}	
+			Object[] objtab=new Object[]{env,EntityType.AGENT_TANKER};//used to give informations to the agent
+			AgentController	ag=c.createNewAgent(agentName,TankerAgent.class.getName(),objtab);
+			agentList.add(ag);
+			System.out.println(agentName+" launched");
+		} catch (StaleProxyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+		
+	    //wumpus on container0
+		 c = containerList.get("container0");
+		agentName="Golem";
+		try {
+			Object[] objtab=new Object[]{env};//used to give informations to the agent
+			AgentController	ag=c.createNewAgent(agentName,DummyWumpusShift.class.getName(),objtab);
+			agentList.add(ag);
+			System.out.println(agentName+" launched");
+		} catch (StaleProxyException e) {
+			e.printStackTrace();
 		}
 
 //
-	for (int i=0;i<1;i++){
 //		
 		c = containerList.get("container0");
-		agentName="AgentCollector"+i;
+		agentName="colT1";
 		try {
 
 
@@ -263,11 +230,53 @@ public class Principal {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	for (int i=0;i<0;i++){
+		
 //		
 		c = containerList.get("container0");
-		agentName="AgentExplore"+i;
+		agentName="colT2";
+		try {
+
+
+			Object[] objtab=new Object[]{env,EntityType.AGENT_COLLECTOR};//used to give informations to the agent
+			AgentController	ag=c.createNewAgent(agentName,CollectorAgent.class.getName(),objtab);
+			agentList.add(ag);
+			System.out.println(agentName+" launched");
+		} catch (StaleProxyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		c = containerList.get("container0");
+		agentName="colT3";
+		try {
+
+
+			Object[] objtab=new Object[]{env,EntityType.AGENT_COLLECTOR};//used to give informations to the agent
+			AgentController	ag=c.createNewAgent(agentName,CollectorAgent.class.getName(),objtab);
+			agentList.add(ag);
+			System.out.println(agentName+" launched");
+		} catch (StaleProxyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		c = containerList.get("container0");
+		agentName="colD1";
+		try {
+
+
+			Object[] objtab=new Object[]{env,EntityType.AGENT_COLLECTOR};//used to give informations to the agent
+			AgentController	ag=c.createNewAgent(agentName,CollectorAgent.class.getName(),objtab);
+			agentList.add(ag);
+			System.out.println(agentName+" launched");
+		} catch (StaleProxyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+//		
+		c = containerList.get("container0");
+		agentName="Explo1";
 		try {
 
 
@@ -279,24 +288,36 @@ public class Principal {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
 //		
-		
-//		//Agent0 on container0
-//		c = containerList.get("container0");
-//		agentName="Explo3";
-//		try {
-//
-//
-//			Object[] objtab=new Object[]{env};//used to give informations to the agent
-//			AgentController	ag=c.createNewAgent(agentName,DummyExploAgent.class.getName(),objtab);
-//			agentList.add(ag);
-//			System.out.println(agentName+" launched");
-//		} catch (StaleProxyException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		c = containerList.get("container0");
+		agentName="Explo2";
+		try {
 
+
+			Object[] objtab=new Object[]{env,EntityType.AGENT_EXPLORER};//used to give informations to the agent
+			AgentController	ag=c.createNewAgent(agentName,ExploreAgent.class.getName(),objtab);
+			agentList.add(ag);
+			System.out.println(agentName+" launched");
+		} catch (StaleProxyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		c = containerList.get("container0");
+		agentName="Explo3";
+		try {
+
+
+			Object[] objtab=new Object[]{env,EntityType.AGENT_EXPLORER};//used to give informations to the agent
+			AgentController	ag=c.createNewAgent(agentName,ExploreAgent.class.getName(),objtab);
+			agentList.add(ag);
+			System.out.println(agentName+" launched");
+		} catch (StaleProxyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//	
+	
+	
 		System.out.println("Agents launched...");
 		return agentList;
 	}

@@ -67,6 +67,7 @@ public class Graphe implements Serializable{
 	}
 	public void initOtherCollect() {
 		ArrayList<AID> list = myAgent.getCollectAgent();
+		System.out.println(myAgent.getLocalName() + " collecteur" + list);
 		otherAgent= new HashMap<String,Couple<String,Integer>>();
 		for (AID a:list) {
 			
@@ -455,12 +456,15 @@ public class Graphe implements Serializable{
 		}else {
 			this.isUpdater=false;
 		}
-		syncCollect(graphe);
+		if (!(myAgent instanceof  ExploreAgent)) {
+			syncCollect(graphe);
+		}
 	}
 	
 	public void syncCollect(Graphe graphe) {
 		for (String tmp1:this.otherAgent.keySet()) {
 			if(this.otherAgent.get(tmp1).getLeft()=="NONE") {
+				System.out.println(graphe.getOtherAgent());
 				if(graphe.getOtherAgent().get(tmp1).getLeft()!="NONE") {
 					this.otherAgent.remove(tmp1);
 					Couple<String,Integer>tmp=new Couple<>(graphe.getOtherAgent().get(tmp1).getLeft(),graphe.getOtherAgent().get(tmp1).getRight());
